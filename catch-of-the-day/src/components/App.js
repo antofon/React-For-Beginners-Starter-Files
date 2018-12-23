@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import Header from "./Header";
 import Order from "./Order";
 import Inventory from "./Inventory";
+import sampleFishes from "../sample-fishes";
 
 class App extends Component {
   // pass data down from higher Parent Component to share with other Components, using state. can set state with constructor or a property
+  // any custom function that needs to update state needs to live where our state lives
   state = {
     fishes: {},
     order: {}
@@ -23,6 +25,10 @@ class App extends Component {
     // if property and value are the same, can just have one of them
     this.setState({ fishes });
   };
+
+  loadSampleFishes = () => {
+    this.setState({ fishes: sampleFishes });
+  };
   render() {
     return (
       <div className="catch-of-the-day">
@@ -34,7 +40,10 @@ class App extends Component {
           <Header tagline="I am cool" />
         </div>
         <Order />
-        <Inventory addFish={this.addFish} />
+        <Inventory
+          addFish={this.addFish}
+          loadSampleFishes={this.loadSampleFishes}
+        />
       </div>
     );
   }
