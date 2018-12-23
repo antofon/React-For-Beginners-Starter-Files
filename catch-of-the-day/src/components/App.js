@@ -3,6 +3,7 @@ import Header from "./Header";
 import Order from "./Order";
 import Inventory from "./Inventory";
 import sampleFishes from "../sample-fishes";
+import Fish from "./Fish";
 
 class App extends Component {
   // pass data down from higher Parent Component to share with other Components, using state. can set state with constructor or a property
@@ -37,7 +38,14 @@ class App extends Component {
           {/* {state: where data lives, props: how the data gets to the component} */}
           {/* Note in chrome dev tools, if you click on a component, it will show $r which is '$r'. you can type $r in console and it will print out the contents of the Header component, which is just an object */}
           <Header tagline="Fresh Seafood Market" />
-          <Header tagline="I am cool" />
+          <ul className="fishes">
+            {/* Object.keys gives us all of the keys to loop over our fish */}
+            {/* need unique id for react to refer to the element you want */}
+            {Object.keys(this.state.fishes).map(key => (
+              <Fish key={key} details={this.state.fishes[key]} />
+            ))}
+          </ul>
+          {/* <Header tagline="I am cool" /> */}
         </div>
         <Order />
         <Inventory
