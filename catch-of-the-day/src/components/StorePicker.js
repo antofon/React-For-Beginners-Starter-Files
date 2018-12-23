@@ -14,25 +14,33 @@ class StorePicker extends Component {
 
   //as app grows and more customs methods are created, the binding can become out of hand. Instead of declaring a method, we can declare a property that is set to an arrow function. properties are bound to the instance rather than 'undefined' so we can access 'this' within the property instead of binding.
 
-  goToStore = event => {
-    event.preventDefault();
-    console.log(this);
-  };
-
   myInput = React.createRef();
-  goToStore(event) {
+  goToStore = event => {
     // 1. Stop the form from submitting
     event.preventDefault();
-
     // 2. get the text from that input
-    console.log(this);
-    //this is undefinded out of render method. all of the built in methods that come from React originate from React.Component. And when we extend our own component from that, any methods created in our own Component are not bound to React.Component by default. So its hard to reference a Component when we need to. So the solution is to bind our own methods.
-    // golden rule in React: DONT TOUCH THE DOM. don't manually select elements
-    // can handle inputs by 1. refs (touches dom to grab element out of it) or 2. state (sync text into input)
-    // ref -> allows us to reference an actual DOM node o n the page
-    //ex: create ref, then use ref={this.refName} to surface it so that it can be used
+    // first .value is React (gets you DOM input elt), second .value is JS, allowing us to get actual value;
+    const storeName = this.myInput.value.value;
     // 3. Change the page to /store/whatever-they-entered
-  }
+    // history.push() activates the push state (this is possible because StorePicker is a child of Router. this means it has access to React Router methods)
+    // using push state to change URL
+    this.props.history.push(`/store/${storeName}`);
+  };
+
+  // goToStore(event) {
+  // 1. Stop the form from submitting
+  // CODE: event.preventDefault();
+
+  // 2. get the text from that input
+
+  // CODE: console.log(this)
+  //this is undefinded out of render method. all of the built in methods that come from React originate from React.Component. And when we extend our own component from that, any methods created in our own Component are not bound to React.Component by default. So its hard to reference a Component when we need to. So the solution is to bind our own methods.
+  // golden rule in React: DONT TOUCH THE DOM. don't manually select elements
+  // can handle inputs by 1. refs (touches dom to grab element out of it) or 2. state (sync text into input)
+  // ref -> allows us to reference an actual DOM node o n the page
+  //ex: create ref, then use ref={this.refName} to surface it so that it can be used
+  // 3. Change the page to /store/whatever-they-entered
+  // }
   render() {
     return (
       <form action="" className="store-selector" onSubmit={this.goToStore}>
