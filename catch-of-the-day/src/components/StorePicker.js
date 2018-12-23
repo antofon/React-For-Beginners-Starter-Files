@@ -12,12 +12,13 @@ class StorePicker extends Component {
 
   // }
 
-  //as app grows and more customs methods are created, the binding can become out of hand, to remedy, we can declare a property that is set to an arrow function. properties are bound to the instance rather than 'undefined' and we can access 'this' within the property.
+  //as app grows and more customs methods are created, the binding can become out of hand. Instead of declaring a method, we can declare a property that is set to an arrow function. properties are bound to the instance rather than 'undefined' so we can access 'this' within the property instead of binding.
 
   goToStore = event => {
     event.preventDefault();
     console.log(this);
   };
+
   myInput = React.createRef();
   goToStore(event) {
     // 1. Stop the form from submitting
