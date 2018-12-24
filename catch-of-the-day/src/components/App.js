@@ -63,7 +63,8 @@ class App extends Component {
           </ul>
           {/* <Header tagline="I am cool" /> */}
         </div>
-        <Order />
+        {/* object spread (i.e {...this.state}) spreads everything from state into order. want to make modular components where we know what data is getting passed. also there might not want to be data that you want to pass down */}
+        <Order fishes={this.state.fishes} order={this.state.order} />
         <Inventory
           addFish={this.addFish}
           loadSampleFishes={this.loadSampleFishes}
