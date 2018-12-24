@@ -30,6 +30,16 @@ class App extends Component {
   loadSampleFishes = () => {
     this.setState({ fishes: sampleFishes });
   };
+
+  addToOrder = key => {
+    // 1. take a copy of state
+    const order = { ...this.state.order };
+    // 2. either add to order, or update number in our order
+    // if it exists, update key. but if we haven't ordered it, make that the first key
+    order[key] = order[key] + 1 || 1;
+    // 3. call setState to update our state object
+    this.setState({ order });
+  };
   render() {
     return (
       <div className="catch-of-the-day">
@@ -42,7 +52,13 @@ class App extends Component {
             {/* Object.keys gives us all of the keys to loop over our fish */}
             {/* need unique id for react to refer to the element you want */}
             {Object.keys(this.state.fishes).map(key => (
-              <Fish key={key} details={this.state.fishes[key]} />
+              // if you need to pass key as a prop, you need to pass it a second time because the key is also used as a unique identifier in this Component. here the key prop is 'index'
+              <Fish
+                key={key}
+                index={key}
+                details={this.state.fishes[key]}
+                addToOrder={this.addToOrder}
+              />
             ))}
           </ul>
           {/* <Header tagline="I am cool" /> */}
