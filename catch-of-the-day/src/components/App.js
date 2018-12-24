@@ -4,6 +4,7 @@ import Order from "./Order";
 import Inventory from "./Inventory";
 import sampleFishes from "../sample-fishes";
 import Fish from "./Fish";
+import base from "../base";
 
 class App extends Component {
   // pass data down from higher Parent Component to share with other Components, using state. can set state with constructor or a property
@@ -13,6 +14,24 @@ class App extends Component {
     order: {}
   };
 
+  // lifecycle methods tell us when certain things are happening. need to wait until app component is on page to sync things up
+
+  //when app is loaded on to the page
+  componentDidMount() {
+    // refs are different in firebase. they are a reference to a piece of the data in database
+    const { params } = this.props.match;
+    // params is the actual value of the random generated path. for now we only care about 'fishes' so that's why it's at the end.
+
+    this.refs = base.syncState(`${params.storeId}/fishes`, {
+      context: this,
+      state: "fishes"
+    });
+  }
+
+  componentWillUnmount() {
+    //prevents listening to changes and then unlistening from them. also prevents memory leaks. mount when go to application, unmount when you click 'back' button
+    base.removeBinding(this.refs);
+  }
   addFish = fish => {
     //1. take a copy of existing state. never want to modify state directly (called mutation). not necessary to do deep clone
     const fishes = { ...this.state.fishes };
