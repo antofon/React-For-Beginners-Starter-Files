@@ -37,7 +37,7 @@ class StorePicker extends Component {
   //this is undefinded out of render method. all of the built in methods that come from React originate from React.Component. And when we extend our own component from that, any methods created in our own Component are not bound to React.Component by default. So its hard to reference a Component when we need to. So the solution is to bind our own methods.
   // golden rule in React: DONT TOUCH THE DOM. don't manually select elements
   // can handle inputs by 1. refs (touches dom to grab element out of it) or 2. state (sync text into input)
-  // ref -> allows us to reference an actual DOM node o n the page
+  // ref -> allows us to reference an actual DOM node on the page
   //ex: create ref, then use ref={this.refName} to surface it so that it can be used
   // 3. Change the page to /store/whatever-they-entered
   // }
