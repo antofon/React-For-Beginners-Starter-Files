@@ -11,6 +11,7 @@ class App extends Component {
   // any custom function that needs to update state needs to live where our state lives
   state = {
     fishes: {},
+    //persisting order state with localStorage
     order: {}
   };
 
@@ -20,6 +21,13 @@ class App extends Component {
   componentDidMount() {
     // refs are different in firebase. they are a reference to a piece of the data in database
     const { params } = this.props.match;
+    //first reinstate our localStorage
+    const localStorageRef = localStorage.getItem(params.storeId);
+    // turn string back into object with JSON.parse
+    if (localStorageRef) {
+      this.setState({ order: JSON.parse(localStorageRef) });
+    }
+    console.log(localStorageRef);
     // params is the actual value of the random generated path. for now we only care about 'fishes' so that's why it's at the end.
 
     this.refs = base.syncState(`${params.storeId}/fishes`, {
@@ -28,10 +36,23 @@ class App extends Component {
     });
   }
 
+  //whenever you add to order
+  componentDidUpdate() {
+    console.log(this.state.order);
+    //add to localStorage
+    // anytime you put object in the place where a string should be the browser will list call the toString() on object which is just [object] [object].
+    //In application tab,
+    //this.props.match.params.storeId = key, this.state.order = value
+    localStorage.setItem(
+      this.props.match.params.storeId,
+      JSON.stringify(this.state.order)
+    );
+  }
   componentWillUnmount() {
     //prevents listening to changes and then unlistening from them. also prevents memory leaks. mount when go to application, unmount when you click 'back' button
     base.removeBinding(this.refs);
   }
+
   addFish = fish => {
     //1. take a copy of existing state. never want to modify state directly (called mutation). not necessary to do deep clone
     const fishes = { ...this.state.fishes };
