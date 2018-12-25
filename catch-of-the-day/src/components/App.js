@@ -76,6 +76,16 @@ class App extends Component {
     this.setState({ fishes });
   };
 
+  deleteFish = key => {
+    //1. take a copy of state
+    const fishes = { ...this.state.fishes };
+    // 2. update the this.state
+    // set the fish that we don't want to null (for firebase)
+    fishes[key] = null;
+    //3. update state
+    this.setState({ fishes });
+  };
+
   loadSampleFishes = () => {
     this.setState({ fishes: sampleFishes });
   };
@@ -89,6 +99,17 @@ class App extends Component {
     // 3. call setState to update our state object
     this.setState({ order });
   };
+
+  removeFromOrder = key => {
+    // 1. take a copy of state
+    const order = { ...this.state.order };
+    // 2. remove the item from order
+    // not mirroring to firebase, so can just delete it
+    delete order[key];
+    // 3. call setState to update our state object
+    this.setState({ order });
+  };
+
   render() {
     return (
       <div className="catch-of-the-day">
@@ -113,10 +134,15 @@ class App extends Component {
           {/* <Header tagline="I am cool" /> */}
         </div>
         {/* object spread (i.e {...this.state}) spreads everything from state into order. want to make modular components where we know what data is getting passed. also there might not want to be data that you want to pass down */}
-        <Order fishes={this.state.fishes} order={this.state.order} />
+        <Order
+          fishes={this.state.fishes}
+          order={this.state.order}
+          removeFromOrder={this.removeFromOrder}
+        />
         <Inventory
           addFish={this.addFish}
           updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
           fishes={this.state.fishes}
         />
