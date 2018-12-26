@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Header from "./Header";
 import Order from "./Order";
 import Inventory from "./Inventory";
@@ -13,6 +14,10 @@ class App extends Component {
     fishes: {},
     //persisting order state with localStorage
     order: {}
+  };
+
+  static propTypes = {
+    match: PropTypes.object
   };
 
   // lifecycle methods tell us when certain things are happening. need to wait until app component is on page to sync things up

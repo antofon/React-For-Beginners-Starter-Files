@@ -1,6 +1,21 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { formatPrice } from "../helpers";
+
 class Fish extends Component {
+  // for regular react components you can create a static PropType, creating proptypes for all of the fish and it is not necessary to duplicate for every fish instance
+  static propTypes = {
+    //.shape() accepts an object, and then you can specify what all of the properties are
+    // anytime you write this.props.something, you should write a propType for it. Wes: stop, drop, prop
+    details: PropTypes.shape({
+      image: PropTypes.string,
+      name: PropTypes.string,
+      desc: PropTypes.string,
+      status: PropTypes.string,
+      price: PropTypes.number
+    }),
+    addToOrder: PropTypes.func
+  };
   handleClick = () => {
     this.props.addToOrder(this.props.index);
   };

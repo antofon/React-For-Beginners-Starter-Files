@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { getFunName } from "../helpers";
 
 class StorePicker extends Component {
+  static PropTypes = {
+    history: PropTypes.object
+  };
   //COMMENT: runs before our Component is created
   // constructor() {
   //COMMENT: runs Component we are extending (React.Component) first before we can extend. must call 'super' first before running anything in constructor. And in the constructor is where you can bind all of the methods

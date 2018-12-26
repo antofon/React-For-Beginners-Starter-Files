@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 // stateless functional component: if component only has a render method and prop types, can convert class to stateless functional component
 
@@ -59,4 +60,10 @@ const Header = props => (
   </header>
 );
 
+// propTypes allows you to know ahead of time what type of data you're expecting
+//development helper, propTypes will not go to production
+
+Header.propTypes = {
+  tagline: PropTypes.string.isRequired
+};
 export default Header;

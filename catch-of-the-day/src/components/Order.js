@@ -1,8 +1,14 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { formatPrice } from "../helpers";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 class Order extends Component {
+  static propTypes = {
+    fishes: PropTypes.object,
+    order: PropTypes.object,
+    removeFromOrder: PropTypes.func
+  };
   // make separate render functions in single Component. when code is starting to get too complex but not enough for a whole new component since this won't be used much elsewhere. custom render function name.
   renderOrder = key => {
     const fish = this.props.fishes[key];
