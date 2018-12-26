@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import firebase, { database } from "firebase";
 import AddFishForm from "./AddFishForm";
 import EditFishForm from "./EditFishForm";
+import Login from "./Login";
+// import default export, {named export} from "file_location"
+import base, { firebaseApp } from "../base";
 
 class Inventory extends Component {
   static propTypes = {
@@ -11,10 +15,84 @@ class Inventory extends Component {
     loadSampleFishes: PropTypes.func
   };
 
+  state = {
+    uid: null,
+    owner: null
+  };
+
+  //component is mounted
+  componentDidMount() {
+    //everytime we try to load the page, firebase is going to see if we're already logged in and authenticate. if true, will pass us our user, which we pass to authHandler which will run all of it's checks.
+    // can have a loading state to not show split second delay
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.authHandler({ user });
+      }
+    });
+  }
+
+  //provides payload of information from user
+  authHandler = async authData => {
+    // 1. look up the current store in the firebase database
+    // fetch (based on currrent store) returns a promise, but if you want to return the store and not the promise, put await before it. then put in the var.
+    const store = await base.fetch(this.props.storeId, { context: this });
+    console.log(store);
+    // 2. claim it if there is no owner
+    if (!store.owner) {
+      //save it as our own. pushing data to firebase with post. post to owner field. if one isn't present it is created
+      // uid is the unique identifier to claim
+      await base.post(`${this.props.storeId}/owner`, {
+        data: authData.user.uid
+      });
+    }
+    // 3. Set the state of the inventory component to reflect the current user. if you don't need data outside local component sometimes you can just create state inside it like we're doing here for the first time.
+    this.setState({
+      uid: authData.user.uid,
+      owner: store.owner || authData.user.uid
+    });
+    console.log(authData);
+  };
+  authenticate = provider => {
+    //need to create auth provider for each login method, but can use variable to acheive this
+    // create var to dynamically call authProvider (Github, Twitter, Facebook)
+    const authProvider = new firebase.auth[`${provider}AuthProvider`]();
+    //bring back connection to firebase's auth
+    //once someone sign's in, we handle it
+    firebaseApp
+      .auth()
+      .signInWithPopup(authProvider)
+      .then(this.authHandler);
+  };
+
+  // use async, to allow us to await because we want to wait for user to logout of firebase
+  logout = async () => {
+    console.log("Log out");
+    await firebase.auth().signOut();
+    //clear state
+    this.setState({ uid: null });
+  };
   render() {
+    const logout = <button onClick={this.logout}>Log Out!</button>;
+    // 1. check if they are logged in
+    if (!this.state.uid) {
+      return <Login authenticate={this.authenticate} />;
+    }
+
+    // 2. check if they are not the owner of the store (If ids dont match)
+    if (this.state.uid !== this.state.owner) {
+      return (
+        <div>
+          <p>Sorry you are not the owner</p>
+          {logout}
+        </div>
+      );
+    }
+
+    // 3. They must be the owner, just render the inventory
     return (
       <div className="inventory">
         <h2>Inventory</h2>
+        {logout}
         {Object.keys(this.props.fishes).map(key => (
           <EditFishForm
             key={key}

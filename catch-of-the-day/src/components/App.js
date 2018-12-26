@@ -150,6 +150,8 @@ class App extends Component {
           deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
           fishes={this.state.fishes}
+          //comes from react router look in apps props
+          storeId={this.props.match.params.storeId}
         />
       </div>
     );
